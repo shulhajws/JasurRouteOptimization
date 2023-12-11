@@ -29,6 +29,8 @@ locationNames = ["Purwakarta Station",
 print("""
 ================== JASUR ROUTE OPTIMIZATION ================== 
 
+Hi, Jasur! Wish you a nice day!😊
+
 Services and Locations:
 1. Drive from/to Purwakarta Station
 2. Buy food in Mie Gacoan
@@ -46,26 +48,47 @@ locationStopList = []
 endLoc=-1
 
 #Selecting Locations To Visit
-numLocVisited = int(input("How many stops do you have to make? "))
-for i in range(1, numLocVisited+1):
-    locationStop = int(input("Location " + str(i) +": "))
-    if (locationStop == 1) or (locationStop == 7) or (locationStop == 9) or (locationStop == 10):
-        isEnd = input("Do you need to visit this location as the end location? (y/n) ")
-        if(isEnd=="y"):
-            endLoc = locationStop-1
-        else:
-            locationStopList.append(locationStop-1)            
+while True:
+    numLocVisited = int(input("How many stops do you have to make? "))
+    if(numLocVisited<1 or numLocVisited>10):
+        print("Please only select location 1 to 10!")
     else:
-        locationStopList.append(locationStop-1)
+        break
+
+for i in range(1, numLocVisited+1):
+    while True:
+        locationStop = int(input("Location " + str(i) +": "))
+        if(locationStop<1 or locationStop>10):
+            print("Please only select location 1 to 10!")
+        else:
+            if (locationStop == 1) or (locationStop == 7) or (locationStop == 9) or (locationStop == 10):
+                isEnd = input("Do you need to visit this location as the end location? (y/n) ")
+                if(isEnd=="y"):
+                    endLoc = locationStop-1
+                elif(isEnd=="n"):
+                    locationStopList.append(locationStop-1)
+                else:
+                    print("Your input is incorrect. You will not stop last at this location.")   
+                    locationStopList.append(locationStop-1)    
+            else:
+                locationStopList.append(locationStop-1)
+            break
 if(endLoc!=-1):
     locationStopList.append(endLoc)
 
 #Selecting Start Location
-startLoc = int(input("Hi, courier! Where are you now? "))
-locationStopList = [startLoc-1] + locationStopList
+while True:
+    startLoc = int(input("Hi, courier! Where are you now? "))
+    if(startLoc<1 or startLoc>10):
+        print("Please only select location 1 to 10!")
+    else:
+        locationStopList = [startLoc-1] + locationStopList
+        break
 
 #Going Back to Start Location
 isBack = input("Do you need to go back to your starting location? (y/n) ")
+if(isBack!="y" and isBack!="n"):
+    print("Your input is incorrect. You will not go back to your current starting location.")
 
 #Getting Locations Graph
 filteredLocationData = locationData[locationStopList][:, locationStopList]
